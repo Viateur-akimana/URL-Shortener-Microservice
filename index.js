@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const bodyParser = require('body-parser');
-
+const validUrl = require('valid-url');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -27,6 +27,10 @@ let count = 1;
 
 app.post('/api/shorturl', (req, res) => {
   const originalUrl = req.body.url;
+
+  if (!validUrl.isWebUri(originalUrl)) {
+    return res.json({ error: 'Invalid URL' });;
+  }
 
   urls.push({ original_url: originalUrl, short_url: count });
   count++;
