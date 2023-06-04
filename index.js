@@ -34,6 +34,18 @@ app.post('/api/shorturl', (req, res) => {
   res.json({ original_url: originalUrl, short_url: count - 1 });
 });
 
+app.get('/api/shorturl/:shortUrl', (req, res) => {
+  const shortUrl = parseInt(req.params.shortUrl);
+
+  const foundUrl = urls.find(url => url.short_url === shortUrl);
+
+  if (foundUrl) {
+    res.redirect(foundUrl.original_url);
+  } else {
+    res.json({ error: 'URL not found' });
+  }
+});
+
 app.listen(port, function() {
   console.log(`Listening on port ${port}`);
 });
